@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ]
         }
     ];
+
     const header = document.getElementById('header');
     const menuToggle = document.getElementById('menuToggle');
     const nav = document.getElementById('nav');
@@ -111,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const carouselDots = document.getElementById('carouselDots');
     const modal = document.getElementById('modal');
     const modalBackdrop = document.getElementById('modalBackdrop');
-    const modalContent = document.getElementById('modalContent');
     const modalClose = document.getElementById('modalClose');
     const modalBody = document.getElementById('modalBody');
     const lightbox = document.getElementById('lightbox');
@@ -131,17 +131,18 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('scroll', handleHeaderScroll, { passive: true });
     handleHeaderScroll();
 
-    menuToggle.addEventListener('click', function () {
-        menuToggle.classList.toggle('active');
-        nav.classList.toggle('active');
-        const isOpen = nav.classList.contains('active');
-        menuToggle.setAttribute('aria-expanded', isOpen);
-        menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
-    });
+    if (menuToggle && nav) {
+        menuToggle.addEventListener('click', function () {
+            menuToggle.classList.toggle('active');
+            nav.classList.toggle('active');
+            const isOpen = nav.classList.contains('active');
+            menuToggle.setAttribute('aria-expanded', isOpen);
+        });
+    }
 
     document.querySelectorAll('.nav-link, .btn-header').forEach(function (link) {
         link.addEventListener('click', function () {
-            if (nav.classList.contains('active')) {
+            if (nav && nav.classList.contains('active')) {
                 nav.classList.remove('active');
                 menuToggle.classList.remove('active');
                 menuToggle.setAttribute('aria-expanded', 'false');
@@ -150,15 +151,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function renderCarousel() {
+        if (!carousel) return;
         carousel.innerHTML = '';
-        carouselDots.innerHTML = '';
+        if (carouselDots) carouselDots.innerHTML = '';
 
         proceduresData.forEach(function (proc, index) {
             const item = document.createElement('div');
             item.className = 'carousel-item';
             item.setAttribute('role', 'listitem');
             item.setAttribute('tabindex', '0');
-            item.setAttribute('aria-label', proc.title);
             item.dataset.procId = proc.id;
 
             item.innerHTML = `
@@ -168,42 +169,40 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="carousel-item-more">Ver detalhes →</span>
             `;
 
-            item.addEventListener('click', function () {
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
                 openModal(proc);
-            });
-            item.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openModal(proc);
-                }
             });
 
             carousel.appendChild(item);
 
-            const dot = document.createElement('button');
-            dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
-            dot.setAttribute('aria-label', 'Ir para ' + proc.title);
-            dot.addEventListener('click', function () {
-                scrollToCarouselItem(index);
-            });
-            carouselDots.appendChild(dot);
+            if (carouselDots) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+                dot.addEventListener('click', function () {
+                    scrollToCarouselItem(index);
+                });
+                carouselDots.appendChild(dot);
+            }
         });
     }
 
     function getCarouselItemWidth() {
-        if (carousel.children.length > 0) {
+        if (carousel && carousel.children.length > 0) {
             return carousel.children[0].offsetWidth + 16; 
         }
         return 300;
     }
 
     function getVisibleIndex() {
+        if (!carousel) return 0;
         const scrollLeft = carousel.scrollLeft;
         const itemWidth = getCarouselItemWidth();
         return Math.round(scrollLeft / itemWidth);
     }
 
     function updateCarouselDots() {
+        if (!carouselDots) return;
         const dots = carouselDots.querySelectorAll('.carousel-dot');
         const currentIndex = getVisibleIndex();
         dots.forEach(function (dot, index) {
@@ -212,39 +211,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function scrollToCarouselItem(index) {
+        if (!carousel) return;
         const itemWidth = getCarouselItemWidth();
         carousel.scrollTo({ left: index * itemWidth, behavior: 'smooth' });
     }
 
-    carouselPrev.addEventListener('click', function () {
-        const currentIndex = getVisibleIndex();
-        const newIndex = Math.max(0, currentIndex - 1);
-        scrollToCarouselItem(newIndex);
-    });
+    if (carouselPrev) {
+        carouselPrev.addEventListener('click', function () {
+            const currentIndex = getVisibleIndex();
+            scrollToCarouselItem(Math.max(0, currentIndex - 1));
+        });
+    }
 
-    carouselNext.addEventListener('click', function () {
-        const currentIndex = getVisibleIndex();
-        const maxIndex = proceduresData.length - 1;
-        const newIndex = Math.min(maxIndex, currentIndex + 1);
-        scrollToCarouselItem(newIndex);
-    });
+    if (carouselNext) {
+        carouselNext.addEventListener('click', function () {
+            const currentIndex = getVisibleIndex();
+            scrollToCarouselItem(Math.min(proceduresData.length - 1, currentIndex + 1));
+        });
+    }
 
-    carousel.addEventListener('scroll', function () {
-        updateCarouselDots();
-        updateCarouselButtons();
-    }, { passive: true });
-
-    function updateCarouselButtons() {
-        const scrollLeft = carousel.scrollLeft;
-        const maxScroll = carousel.scrollWidth - carousel.clientWidth - 10;
-        carouselPrev.disabled = scrollLeft <= 10;
-        carouselNext.disabled = scrollLeft >= maxScroll;
+    if (carousel) {
+        carousel.addEventListener('scroll', function () {
+            updateCarouselDots();
+        }, { passive: true });
     }
 
     renderCarousel();
-    updateCarouselButtons();
 
     function openModal(proc) {
+        if (!modalBody || !modal) return;
         modalBody.innerHTML = `
             <h3 class="modal-title">${proc.title}</h3>
             <span class="modal-category">${proc.category}</span>
@@ -262,7 +257,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
             <div class="modal-cta">
-                <a href="https://wa.me/557132374001?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20com%20o%20Dr.%20Marcelo%20Pedrosa." target="_blank" rel="noopener" class="btn btn-red btn-sm"> Agendar Avaliação
+                <a href="https://wa.me/557132374001?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20com%20o%20Dr.%20Marcelo%20Pedrosa." target="_blank" rel="noopener" class="btn btn-red btn-sm">
+                    Agendar Avaliação
                 </a>
                 <a href="#locais" class="btn btn-outline btn-sm modal-close-trigger">Fechar</a>
             </div>
@@ -271,28 +267,28 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        modalBody.querySelector('.modal-close-trigger').addEventListener('click', function (e) {
-            e.preventDefault();
-            closeModal();
-        });
+        const closeTrigger = modalBody.querySelector('.modal-close-trigger');
+        if (closeTrigger) {
+            closeTrigger.addEventListener('click', function (e) {
+                e.preventDefault();
+                closeModal();
+            });
+        }
     }
 
     function closeModal() {
+        if (!modal) return;
         modal.classList.remove('active');
         document.body.style.overflow = '';
     }
 
-    modalClose.addEventListener('click', closeModal);
-    modalBackdrop.addEventListener('click', closeModal);
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            if (modal.classList.contains('active')) {
-                closeModal();
-            }
-            if (lightbox.classList.contains('active')) {
-                closeLightbox();
-            }
+            if (modal && modal.classList.contains('active')) closeModal();
+            if (lightbox && lightbox.classList.contains('active')) closeLightbox();
         }
     });
 
@@ -302,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     galleryItems.forEach(function (item) {
         const img = item.querySelector('img');
+        if (!img) return;
         const caption = item.dataset.caption || img.alt;
         galleryImages.push({ src: img.src, caption: caption });
 
@@ -309,12 +306,15 @@ document.addEventListener('DOMContentLoaded', function () {
             currentLightboxIndex = galleryImages.findIndex(function (g) { return g.src === img.src; });
             if (currentLightboxIndex === -1) currentLightboxIndex = 0;
             updateLightbox();
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            if (lightbox) {
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
 
     function updateLightbox() {
+        if (!lightboxImg || !lightboxCaption || galleryImages.length === 0) return;
         const imageData = galleryImages[currentLightboxIndex];
         lightboxImg.src = imageData.src;
         lightboxImg.alt = imageData.caption;
@@ -322,6 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function closeLightbox() {
+        if (!lightbox) return;
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
     }
@@ -331,94 +332,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateLightbox();
     }
 
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightboxPrev.addEventListener('click', function () { lightboxNavigate(-1); });
-    lightboxNext.addEventListener('click', function () { lightboxNavigate(1); });
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightboxPrev) lightboxPrev.addEventListener('click', function () { lightboxNavigate(-1); });
+    if (lightboxNext) lightboxNext.addEventListener('click', function () { lightboxNavigate(1); });
 
-    lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox) {
-            closeLightbox();
-        }
-    });
-
-    document.addEventListener('keydown', function (e) {
-        if (lightbox.classList.contains('active')) {
-            if (e.key === 'ArrowLeft') lightboxNavigate(-1);
-            if (e.key === 'ArrowRight') lightboxNavigate(1);
-        }
-    });
-
-    const revealElements = document.querySelectorAll('.reveal');
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-    };
-
-    const revealObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
-            }
+    if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+            if (e.target === lightbox) closeLightbox();
         });
-    }, observerOptions);
-
-    revealElements.forEach(function (el) {
-        revealObserver.observe(el);
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-        anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            const targetEl = document.querySelector(targetId);
-            if (targetEl) {
-                e.preventDefault();
-                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let isDragging = false;
-
-    carousel.addEventListener('touchstart', function (e) {
-        touchStartX = e.touches[0].clientX;
-        isDragging = true;
-    }, { passive: true });
-
-    carousel.addEventListener('touchmove', function (e) {
-        if (isDragging) {
-            touchEndX = e.touches[0].clientX;
-        }
-    }, { passive: true });
-
-    carousel.addEventListener('touchend', function () {
-        if (!isDragging) return;
-        isDragging = false;
-        const swipeDistance = touchStartX - touchEndX;
-        const swipeThreshold = 60;
-
-        if (Math.abs(swipeDistance) > swipeThreshold) {
-            const currentIndex = getVisibleIndex();
-            if (swipeDistance > 0 && currentIndex < proceduresData.length - 1) {
-                scrollToCarouselItem(currentIndex + 1);
-            } else if (swipeDistance < 0 && currentIndex > 0) {
-                scrollToCarouselItem(currentIndex - 1);
-            }
-        }
-    });
-
-    window.addEventListener('resize', function () {
-        updateCarouselButtons();
-        if (carousel.children.length > 0) {
-            updateCarouselDots();
-        }
-    });
-
-    console.log('🚀 Landing Page Dr. Marcelo Pedrosa Marinho carregada com sucesso!');
+    }
 
     const galleryCarousel = document.getElementById('galleryCarousel');
     const galleryPrev = document.getElementById('galleryPrev');
@@ -437,18 +359,19 @@ document.addEventListener('DOMContentLoaded', function () {
         galleryNext.addEventListener('click', function () {
             galleryCarousel.scrollBy({ left: getGalleryScrollAmount(), behavior: 'smooth' });
         });
-
-        galleryCarousel.addEventListener('scroll', function () {
-            const scrollLeft = galleryCarousel.scrollLeft;
-            const maxScroll = galleryCarousel.scrollWidth - galleryCarousel.clientWidth - 5;
-            
-            galleryPrev.style.opacity = scrollLeft <= 5 ? '0.4' : '1';
-            galleryPrev.style.cursor = scrollLeft <= 5 ? 'not-allowed' : 'pointer';
-            
-            galleryNext.style.opacity = scrollLeft >= maxScroll ? '0.4' : '1';
-            galleryNext.style.cursor = scrollLeft >= maxScroll ? 'not-allowed' : 'pointer';
-        }, { passive: true });
-        galleryCarousel.dispatchEvent(new Event('scroll'));
     }
 
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(function (el) {
+        revealObserver.observe(el);
+    });
 });
