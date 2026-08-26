@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
+
     const proceduresData = [
         {
             id: 'coluna',
@@ -122,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const lightboxNext = document.getElementById('lightboxNext');
 
     function handleHeaderScroll() {
+        if (!header) return;
         if (window.scrollY > 60) {
             header.classList.add('scrolled');
         } else {
@@ -144,8 +146,10 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function () {
             if (nav && nav.classList.contains('active')) {
                 nav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                menuToggle.setAttribute('aria-expanded', 'false');
+                if (menuToggle) {
+                    menuToggle.classList.remove('active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
             }
         });
     });
@@ -179,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (carouselDots) {
                 const dot = document.createElement('button');
                 dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Ir para slide ${index + 1}`);
                 dot.addEventListener('click', function () {
                     scrollToCarouselItem(index);
                 });
@@ -328,6 +333,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function lightboxNavigate(direction) {
+        if (galleryImages.length === 0) return;
         currentLightboxIndex = (currentLightboxIndex + direction + galleryImages.length) % galleryImages.length;
         updateLightbox();
     }
@@ -362,16 +368,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
+    if (revealElements.length > 0 && 'IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
 
-    revealElements.forEach(function (el) {
-        revealObserver.observe(el);
-    });
+        revealElements.forEach(function (el) {
+            revealObserver.observe(el);
+        });
+    }
 });
