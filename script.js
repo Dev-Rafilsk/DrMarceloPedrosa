@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
             <div class="modal-cta">
-                <a href="https://wa.me/557132374001?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20com%20o%20Dr.%20Marcelo%20Pedrosa." target="_blank" rel="noopener" class="btn btn-red btn-sm">
+                <a href="#locais" class="btn btn-red btn-sm">
                     Agendar Avaliação
                 </a>
                 <a href="#locais" class="btn btn-outline btn-sm modal-close-trigger">Fechar</a>
