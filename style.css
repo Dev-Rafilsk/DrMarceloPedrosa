@@ -563,10 +563,10 @@ h6 {
 
 .about-signature {
     font-family: 'Brush Script MT', 'Lucida Handwriting', 'Caveat', cursive;
-    font-size: 2.2rem;
-    color: var(--blue-medium);
-    transform: rotate(-3deg);
-    margin-top: 10px;
+    font-size: 2rem;
+    color: var(--text-dark);
+    transform: rotate(0deg);
+    margin-top: 15px;
 }
 
 .procedures {
