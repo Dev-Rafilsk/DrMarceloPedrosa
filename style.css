@@ -246,33 +246,34 @@ h6 {
     width: 100%;
 }
 
-.logo {
+.nav-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     text-decoration: none;
-    color: #fff;
 }
 
-.logo-icon {
-    font-size: 1.6rem;
-    color: var(--blue-primary);
+.logo-mm {
+    height: 48px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(45, 179, 154, 0.3));
 }
 
-.logo-text {
+.brand-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
+    justify-content: center;
 }
 
-.logo-text strong {
+.nome-medico {
     font-family: var(--font-primary);
     font-size: 1.1rem;
     font-weight: 700;
     color: #fff;
 }
 
-.logo-text small {
+.especialidade {
     font-size: 0.7rem;
     color: #9ca3af;
 }
