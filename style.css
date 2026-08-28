@@ -1022,6 +1022,21 @@ h6 {
     line-height: 1.4;
 }
 
+.clinic-schedule-box, .viterbo-unit {
+    background: rgba(26, 115, 232, 0.05);
+    border-left: 3px solid var(--blue-primary);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    margin-top: 8px;
+    width: 100%;
+}
+
+.clinic-schedule-box p, .clinic-schedule-sub {
+    font-size: 0.8rem;
+    color: #374151 !important;
+    line-height: 1.4;
+}
+
 .location-map {
     border-radius: var(--radius-md);
     overflow: hidden;
