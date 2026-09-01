@@ -1,6 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
     'use strict';
-
     const proceduresData = [
         {
             id: 'coluna',
@@ -123,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const lightboxNext = document.getElementById('lightboxNext');
 
     function handleHeaderScroll() {
-        if (!header) return;
         if (window.scrollY > 60) {
             header.classList.add('scrolled');
         } else {
@@ -146,10 +144,8 @@ document.addEventListener('DOMContentLoaded', function () {
         link.addEventListener('click', function () {
             if (nav && nav.classList.contains('active')) {
                 nav.classList.remove('active');
-                if (menuToggle) {
-                    menuToggle.classList.remove('active');
-                    menuToggle.setAttribute('aria-expanded', 'false');
-                }
+                menuToggle.classList.remove('active');
+                menuToggle.setAttribute('aria-expanded', 'false');
             }
         });
     });
@@ -183,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (carouselDots) {
                 const dot = document.createElement('button');
                 dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
-                dot.setAttribute('aria-label', `Ir para slide ${index + 1}`);
                 dot.addEventListener('click', function () {
                     scrollToCarouselItem(index);
                 });
@@ -262,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
             <div class="modal-cta">
-                <a href="#locais" class="btn btn-red btn-sm">
+                <a href="#locais" target="_blank" rel="noopener" class="btn btn-red btn-sm">
                     Agendar Avaliação
                 </a>
                 <a href="#locais" class="btn btn-outline btn-sm modal-close-trigger">Fechar</a>
@@ -285,10 +280,77 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!modal) return;
         modal.classList.remove('active');
         document.body.style.overflow = '';
+        const modalContent = document.getElementById('modalContent');
+        if (modalContent) modalContent.classList.remove('modal-light');
     }
 
     if (modalClose) modalClose.addEventListener('click', closeModal);
     if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+
+    const planosPorClinica = {
+        'garibaldi': {
+            titulo: "Planos Aceitos - Clínica Salva'dor",
+            planos: [
+                { nome: "Bradesco Saúde", logo: "logo-bradescos.png" },
+                { nome: "SulAmérica", logo: "logo-sulamerica.png" },
+                { nome: "Unimed", logo: "logo-unimed.png" },
+                { nome: "TRT5", logo: "logo-trt5.png" },
+                { nome: "Amil", logo: "logo-amil.png" },
+                { nome: "Seguros Unimed", logo: "logo-segurosU.png" }
+            ]
+        },
+        'brotas': {
+            titulo: "Planos Aceitos - Clínicas Viterbo",
+            planos: [
+                { nome: "Amil", logo: "logo-amil.png" },
+                { nome: "Cassi", logo: "logo-cassi.png" },
+                { nome: "Fusex", logo: "logo-fusex.png" },
+                { nome: "Bradesco Saúde", logo: "logo-bradescos.png" },
+                { nome: "SulAmérica", logo: "logo-sulamerica.png" },
+                { nome: "Petrobras", logo: "logo-petrobras.png" }
+            ]
+        }
+    };
+
+    window.abrirModalPlanos = function(clinicaId) {
+        const dadosClinica = planosPorClinica[clinicaId];
+        if (!dadosClinica || !modalBody || !modal) return;
+        const modalContent = document.getElementById('modalContent');
+        if (modalContent) modalContent.classList.add('modal-light');
+
+        const logosHtml = dadosClinica.planos.map(function(plano) {
+            return `
+            <div class="plano-item">
+                <img src="${plano.logo}" alt="${plano.nome}" title="${plano.nome}">
+                <span>${plano.nome}</span>
+            </div>
+            `;
+        }).join('');
+
+        modalBody.innerHTML = `
+            <h3 class="modal-title" style="margin-bottom: 24px;">${dadosClinica.titulo}</h3>
+            <div class="modal-planos-grid">
+                ${logosHtml}
+            </div>
+            <p class="insurance-disclaimer" style="text-align: center; margin-top: 24px;">
+                Sujeito a alterações. Confirme a cobertura com a clínica.
+            </p>
+            <div class="modal-cta" style="justify-content: center; margin-top: 16px;">
+                <button class="btn btn-outline btn-sm modal-close-trigger">Fechar</button>
+            </div>
+        `;
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        const closeTrigger = modalBody.querySelector('.modal-close-trigger');
+        if (closeTrigger) {
+            closeTrigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                closeModal();
+            });
+        }
+    };
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
@@ -333,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function lightboxNavigate(direction) {
-        if (galleryImages.length === 0) return;
         currentLightboxIndex = (currentLightboxIndex + direction + galleryImages.length) % galleryImages.length;
         updateLightbox();
     }
@@ -368,18 +429,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length > 0 && 'IntersectionObserver' in window) {
-        const revealObserver = new IntersectionObserver(function (entries, observer) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        revealElements.forEach(function (el) {
-            revealObserver.observe(el);
+    const revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+            }
         });
-    }
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(function (el) {
+        revealObserver.observe(el);
+    });
 });
