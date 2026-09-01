@@ -296,7 +296,8 @@
                 { nome: "Unimed", logo: "logo-unimed.png" },
                 { nome: "TRT5", logo: "logo-trt5.png" },
                 { nome: "Amil", logo: "logo-amil.png" },
-                { nome: "Seguros Unimed", logo: "logo-segurosU.png" }
+                { nome: "Seguros Unimed", logo: "logo-segurosU.png" },
+             { nome: "ProAsa Saúde", logo: "logo-proasa.png" }
             ]
         },
         'brotas': {
@@ -305,9 +306,23 @@
                 { nome: "Amil", logo: "logo-amil.png" },
                 { nome: "Cassi", logo: "logo-cassi.png" },
                 { nome: "Fusex", logo: "logo-fusex.png" },
-                { nome: "Bradesco Saúde", logo: "logo-bradescos.png" },
-                { nome: "SulAmérica", logo: "logo-sulamerica.png" },
-                { nome: "Petrobras", logo: "logo-petrobras.png" }
+                { nome: "Petrobras", logo: "logo-petrobras.png" },
+                { nome: "Vale", logo: "logo-vale.png" },
+                { nome: "Apub", logo: "logo-apub.png" },
+                { nome: "Asfeb", logo: "logo-asfeb.png" },
+                { nome: "Asseba", logo: "logo-asseba.png" },
+                { nome: "Asteba", logo: "logo-asteba.png" },
+                { nome: "BC Saúde", logo: "logo-bcsaude.png" },
+                { nome: "Saúde Caixa", logo: "logo-caixasaude.png" },
+                { nome: "Camed", logo: "logo-camed.png" },
+                { nome: "CapSaúde", logo: "logo-capsaude.png" },
+                { nome: "Casembrapa", logo: "logo-casembrapa.png" },
+                { nome: "Casseb", logo: "logo-casseb.png" },
+                { nome: "Codevasf", logo: "logo-codevasf.png" },
+                { nome: "Conab", logo: "logo-conab.png" },
+                { nome: "Fachesf", logo: "logo-fachesf.png" },
+                { nome: "Geap Saúde", logo: "logo-geap.png" },
+                { nome: "Pasa", logo: "logo-pasa.png" },
             ]
         }
     };
