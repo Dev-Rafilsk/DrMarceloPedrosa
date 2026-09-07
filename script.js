@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     'use strict';
     const proceduresData = [
         {
@@ -271,105 +271,17 @@
         if (closeTrigger) {
             closeTrigger.addEventListener('click', function (e) {
                 e.preventDefault();
-                closeModal();
+                window.fecharModalPlanos();
             });
         }
     }
 
-    function closeModal() {
-        if (!modal) return;
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        const modalContent = document.getElementById('modalContent');
-        if (modalContent) modalContent.classList.remove('modal-light');
-    }
-
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
-
-    const planosPorClinica = {
-        'garibaldi': {
-            titulo: "Planos Aceitos - Clínica Salva'dor",
-            planos: [
-                { nome: "Bradesco Saúde", logo: "logo-bradescos.png" },
-                { nome: "SulAmérica", logo: "logo-sulamerica.png" },
-                { nome: "Unimed", logo: "logo-unimed.png" },
-                { nome: "TRT5", logo: "logo-trt5.png" },
-                { nome: "Amil", logo: "logo-amil.png" },
-                { nome: "Seguros Unimed", logo: "logo-segurosU.png" },
-             { nome: "ProAsa Saúde", logo: "logo-proasa.png" }
-            ]
-        },
-        'brotas': {
-            titulo: "Planos Aceitos - Clínicas Viterbo",
-            planos: [
-                { nome: "Amil", logo: "logo-amil.png" },
-                { nome: "Cassi", logo: "logo-cassi.png" },
-                { nome: "Fusex", logo: "logo-fusex.png" },
-                { nome: "Petrobras", logo: "logo-petrobras.png" },
-                { nome: "Vale", logo: "logo-vale.png" },
-                { nome: "Apub", logo: "logo-apub.png" },
-                { nome: "Asfeb", logo: "logo-asfeb.png" },
-                { nome: "Asseba", logo: "logo-asseba.png" },
-                { nome: "Asteba", logo: "logo-asteba.png" },
-                { nome: "BC Saúde", logo: "logo-bcsaude.png" },
-                { nome: "Saúde Caixa", logo: "logo-caixasaude.png" },
-                { nome: "Camed", logo: "logo-camed.png" },
-                { nome: "CapSaúde", logo: "logo-capsaude.png" },
-                { nome: "Casembrapa", logo: "logo-casembrapa.png" },
-                { nome: "Casseb", logo: "logo-casseb.png" },
-                { nome: "Codevasf", logo: "logo-codevasf.png" },
-                { nome: "Conab", logo: "logo-conab.png" },
-                { nome: "Fachesf", logo: "logo-fachesf.png" },
-                { nome: "Geap Saúde", logo: "logo-geap.png" },
-                { nome: "Pasa", logo: "logo-pasa.png" },
-            ]
-        }
-    };
-
-    window.abrirModalPlanos = function(clinicaId) {
-        const dadosClinica = planosPorClinica[clinicaId];
-        if (!dadosClinica || !modalBody || !modal) return;
-        const modalContent = document.getElementById('modalContent');
-        if (modalContent) modalContent.classList.add('modal-light');
-
-        const logosHtml = dadosClinica.planos.map(function(plano) {
-            return `
-            <div class="plano-item">
-                <img src="${plano.logo}" alt="${plano.nome}" title="${plano.nome}">
-                <span>${plano.nome}</span>
-            </div>
-            `;
-        }).join('');
-
-        modalBody.innerHTML = `
-            <h3 class="modal-title" style="margin-bottom: 24px;">${dadosClinica.titulo}</h3>
-            <div class="modal-planos-grid">
-                ${logosHtml}
-            </div>
-            <p class="insurance-disclaimer" style="text-align: center; margin-top: 24px;">
-                Sujeito a alterações. Confirme a cobertura com a clínica.
-            </p>
-            <div class="modal-cta" style="justify-content: center; margin-top: 16px;">
-                <button class="btn btn-outline btn-sm modal-close-trigger">Fechar</button>
-            </div>
-        `;
-
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-
-        const closeTrigger = modalBody.querySelector('.modal-close-trigger');
-        if (closeTrigger) {
-            closeTrigger.addEventListener('click', function(e) {
-                e.preventDefault();
-                closeModal();
-            });
-        }
-    };
+    if (modalClose) modalClose.addEventListener('click', window.fecharModalPlanos);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', window.fecharModalPlanos);
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            if (modal && modal.classList.contains('active')) closeModal();
+            if (modal && modal.classList.contains('active')) window.fecharModalPlanos();
             if (lightbox && lightbox.classList.contains('active')) closeLightbox();
         }
     });
@@ -457,3 +369,89 @@
         revealObserver.observe(el);
     });
 });
+
+const planosPorClinica = {
+    'garibaldi': {
+        titulo: "Planos Aceitos - Clínica Salva'dor",
+        planos: [
+            { nome: "Bradesco Saúde", logo: "logo-bradescos.png" },
+            { nome: "SulAmérica", logo: "logo-sulamerica.png" },
+            { nome: "Unimed", logo: "logo-unimed.png" },
+            { nome: "TRT5", logo: "logo-trt5.png" },
+            { nome: "Amil", logo: "logo-amil.png" },
+            { nome: "Seguros Unimed", logo: "logo-segurosU.png" },
+            { nome: "ProAsa Saúde", logo: "logo-proasa.png" }
+        ]
+    },
+    'brotas': {
+        titulo: "Planos Aceitos - Clínicas Viterbo",
+        planos: [
+            { nome: "Amil", logo: "logo-amil.png" },
+            { nome: "Cassi", logo: "logo-cassi.png" },
+            { nome: "Fusex", logo: "logo-fusex.png" },
+            { nome: "Petrobras", logo: "logo-petrobras.png" },
+            { nome: "Vale", logo: "logo-vale.png" },
+            { nome: "Apub", logo: "logo-apub.png" },
+            { nome: "Asfeb", logo: "logo-asfeb.png" },
+            { nome: "Asseba", logo: "logo-asseba.png" },
+            { nome: "Asteba", logo: "logo-asteba.png" },
+            { nome: "BC Saúde", logo: "logo-bcsaude.png" },
+            { nome: "Saúde Caixa", logo: "logo-caixasaude.png" },
+            { nome: "Camed", logo: "logo-camed.png" },
+            { nome: "CapSaúde", logo: "logo-capsaude.png" },
+            { nome: "Casembrapa", logo: "logo-casembrapa.png" },
+            { nome: "Casseb", logo: "logo-casseb.png" },
+            { nome: "Codevasf", logo: "logo-codevasf.png" },
+            { nome: "Conab", logo: "logo-conab.png" },
+            { nome: "Fachesf", logo: "logo-fachesf.png" },
+            { nome: "Geap Saúde", logo: "logo-geap.png" },
+            { nome: "Pasa", logo: "logo-pasa.png" }
+        ]
+    }
+};
+
+window.fecharModalPlanos = function() {
+    const modal = document.getElementById('modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    const modalContent = document.getElementById('modalContent');
+    if (modalContent) modalContent.classList.remove('modal-light');
+};
+
+window.abrirModalPlanos = function(clinicaId) {
+    const dadosClinica = planosPorClinica[clinicaId];
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    const modalContent = document.getElementById('modalContent');
+
+    if (!dadosClinica || !modalBody || !modal) return;
+    
+    if (modalContent) modalContent.classList.add('modal-light');
+
+    const logosHtml = dadosClinica.planos.map(function(plano) {
+        return `
+        <div class="plano-item">
+            <img src="${plano.logo}" alt="${plano.nome}" title="${plano.nome}">
+            <span>${plano.nome}</span>
+        </div>
+        `;
+    }).join('');
+
+    modalBody.innerHTML = `
+        <h3 class="modal-title" style="margin-bottom: 24px; text-align: center;">${dadosClinica.titulo}</h3>
+        <div class="modal-planos-grid">
+            ${logosHtml}
+        </div>
+        <p class="insurance-disclaimer" style="text-align: center; margin-top: 24px;">
+            Sujeito a alterações. Confirme a cobertura com a clínica.
+        </p>
+        <div class="modal-cta" style="justify-content: center; margin-top: 16px;">
+            <button class="btn btn-outline btn-sm" onclick="window.fecharModalPlanos()">Fechar</button>
+        </div>
+    `;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+};
