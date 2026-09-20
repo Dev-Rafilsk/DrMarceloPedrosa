@@ -1082,3 +1082,98 @@ h1, h2, h3, h4, h5, h6 {
         color: var(--text-dark); 
     }
 }
+/* --- SEÇÃO DE VÍDEO DO PROCEDIMENTO (HÉRNIA DE DISCO) --- */
+.procedure-video {
+    background: var(--bg-white);
+    padding: 60px 0;
+}
+
+.video-glass-card {
+    padding: 36px;
+    border-radius: var(--radius-xl);
+    max-width: 1040px;
+    margin: 0 auto;
+}
+
+.video-split-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .video-split-layout {
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 40px;
+    }
+}
+
+.video-player-box {
+    position: relative;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    background: #000;
+}
+
+.procedure-video-element {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    aspect-ratio: 16 / 9;
+    display: block;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+}
+
+.video-info-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.video-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 12px 0;
+    line-height: 1.3;
+}
+
+.video-description {
+    font-size: 0.92rem;
+    color: var(--text-medium);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.video-highlights {
+    list-style: none;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.video-highlights li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--text-light);
+    margin-bottom: 12px;
+}
+
+.video-highlights li svg {
+    color: var(--green-accent);
+    flex-shrink: 0;
+}
+
+@media (max-width: 991px) {
+    .video-glass-card {
+        padding: 24px;
+    }
+    .video-title {
+        font-size: 1.35rem;
+    }
+}
