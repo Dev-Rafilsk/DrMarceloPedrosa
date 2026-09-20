@@ -845,6 +845,29 @@ h1, h2, h3, h4, h5, h6 {
     padding: 12px 16px;
 }
 
+/* CORREÇÃO DO BOTÃO WHATSAPP/AGENDAMENTO NO CARD CLARO */
+.card-action-wrapper .btn-red {
+    background: var(--red-cta) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: var(--shadow-red);
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.card-action-wrapper .btn-red:hover {
+    background: var(--red-dark) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+.card-action-wrapper .btn-green {
+    background: #25d366 !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-weight: 600;
+}
+
 @media (max-width: 767px) {
     .card-action-wrapper {
         flex-direction: column;
@@ -877,9 +900,10 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-2px);
 }
 
+/* CORREÇÃO DE GRID PARA APENAS 1 ENDEREÇO DA VITERBO */
 .viterbo-units-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 12px;
     margin-bottom: 16px;
 }
@@ -952,7 +976,6 @@ h1, h2, h3, h4, h5, h6 {
 .modal-light .insurance-disclaimer { color: #6b7280 !important; }
 .modal-light .btn-outline { color: var(--blue-primary); border-color: var(--blue-primary); }
 .modal-light .btn-outline:hover { background: var(--blue-light); color: var(--blue-dark); }
-
 
 .footer { 
     background: var(--bg-dark); 
