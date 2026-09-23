@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <a href="#locais" target="_blank" rel="noopener" class="btn btn-red btn-sm">
                     Agendar Avaliação
                 </a>
-                <a href="#locais" class="btn btn-outline btn-sm modal-close-trigger">Fechar</a>
+                <a href="#locais" class="btn btn-outline-blue btn-sm modal-close-trigger">Fechar</a>
             </div>
         `;
 
@@ -448,7 +448,8 @@ window.abrirModalPlanos = function(clinicaId) {
             Sujeito a alterações. Confirme a cobertura com a clínica.
         </p>
         <div class="modal-cta" style="justify-content: center; margin-top: 16px;">
-            <button class="btn btn-outline btn-sm" onclick="window.fecharModalPlanos()">Fechar</button>
+            <!-- O bug estava aqui: o btn-outline estava com fonte branca em um fundo branco. Mudei para btn-outline-blue -->
+            <button class="btn btn-outline-blue btn-sm" onclick="window.fecharModalPlanos()">Fechar</button>
         </div>
     `;
 
